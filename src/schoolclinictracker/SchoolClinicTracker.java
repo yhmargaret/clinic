@@ -9,6 +9,7 @@ public class SchoolClinicTracker {
         Scanner scan = new Scanner(System.in);
         Students student = new Students();
         Medications meds = new Medications();
+        Prescriptions pres = new Prescriptions();
         
         int choice;
         do {    
@@ -31,6 +32,9 @@ public class SchoolClinicTracker {
                         break; 
                     case 2:
                         meds.medicationConfig();
+                        break;
+                    case 3:
+                        pres.prescriptionsConfig();
                         break;
                     case 5:                      
                         System.out.println("Exiting...");
