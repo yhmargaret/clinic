@@ -1,12 +1,7 @@
 package schoolclinictracker;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import static schoolclinictracker.Config.connectDB;
 
 public class Medications {
     Scanner scan = new Scanner(System.in);
@@ -93,33 +88,32 @@ public class Medications {
     
     public void updateMedicine(){
 
-        System.out.print("Medicine ID you want to Edit: ");
-        int id = scan.nextInt();
-        scan.nextLine();
-        
-        String findID = "SELECT * FROM medications WHERE ID = " + id;
-
-        try (Connection con = connectDB();
-            PreparedStatement findIDpst = con.prepareStatement(findID);
-            ResultSet rs = findIDpst.executeQuery();){
+        int id;        
+        boolean idExists;
+        do{
+            System.out.print("Medicine ID you want to delete: ");
+            id = scan.nextInt();
             
-            if(!rs.next()){
-                System.out.println("Medicine with ID " + id + " Doesn't Exist.");
+            idExists = conf.doesIDExist("medications", id);
+            if(!idExists){
+                System.out.println("Medicine ID Doesn't Exist.\n");
                 return;
             }
-
-            System.out.println("\nSelected Medicine");               
-            String query = "SELECT * FROM medications WHERE ID = " + id;
-            viewMedications(query);
-            
-            System.out.println("");
-
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        }while(!idExists);
+        scan.nextLine();
         
-        String[] columnHeaders = {"Medicine", "Description"};
-        String[] columnNames = {"medication_name", "description"};
-        conf.updateRecord("medications", columnHeaders, columnNames, id);   
+        String query = "SELECT * FROM prescriptions WHERE id = " + id;
+        viewMedications(query);
+        
+        System.out.println("Enter New Medicine Details:");
+
+        System.out.print("\nNew Medicine Name: ");
+        String name = scan.nextLine();
+        
+        System.out.print("Description: ");
+        String desc = scan.nextLine();
+        
+        String sql = "UPDATE students SET medication_name = ?, description = ? WHERE id = ?";
+        conf.updateRecord(sql, name, desc, id);
     }
 }

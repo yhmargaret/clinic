@@ -4,9 +4,11 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class SchoolClinicTracker {
+    static Config conf = new Config();
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
+        
         Students student = new Students();
         Medications meds = new Medications();
         Prescriptions pres = new Prescriptions();
@@ -36,6 +38,8 @@ public class SchoolClinicTracker {
                     case 3:
                         pres.prescriptionsConfig();
                         break;
+                    case 4:
+                        presHistory();
                     case 5:                      
                         System.out.println("Exiting...");
                         break;
@@ -49,5 +53,19 @@ public class SchoolClinicTracker {
             }
         } while (choice != 5);  
     }
-
+    
+    public static void presHistory(){
+        System.out.println("\n\t\t\t\t\t   + PRESCRIPTIONS HISTORY +");
+        
+        String sql = "SELECT pres.id, stud.s_name AS s_name, med.medication_name AS med_name, pres.dosage, pres.prescription_date "
+                + "FROM prescriptions pres "
+                + "JOIN students stud ON stud.id = pres.student_id "
+                + "JOIN medications med ON med.id = pres.med_id";
+        
+        String[] headers = {"ID", "Student Name", "Medication Name", "Dosage", "Prescription Date"};
+        String[] columns = {"id", "s_name", "med_name", "dosage", "prescription_date"};
+        int spacing = 20;
+        
+        conf.viewRecords(sql, spacing, headers, columns);
+    }
 }

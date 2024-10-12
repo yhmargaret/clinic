@@ -1,19 +1,13 @@
 package schoolclinictracker;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.InputMismatchException;
-import java.util.Scanner;
-import static schoolclinictracker.Config.connectDB;
+import java.util.Scanner;;
 
 public class Students {
     Scanner scan = new Scanner(System.in);
     Config conf = new Config();
         
     public void studentConfig(){
-        
         
         int opt;
 
@@ -106,34 +100,39 @@ public class Students {
     
     public void updateStudent(){
 
-        System.out.print("Student ID you want to Edit: ");
-        int id = scan.nextInt();
+        int id;        
+        boolean idExists;
+        do{
+            System.out.print("Student ID you want to delete: ");
+            id = scan.nextInt();
+            
+            idExists = conf.doesIDExist("students", id);
+            if(!idExists){
+                System.out.println("Student ID Doesn't Exist.\n");
+            }
+        }while(!idExists);
         scan.nextLine();
         
-        String findID = "SELECT * FROM students WHERE ID = " + id;
-
-        try (Connection con = connectDB();
-            PreparedStatement findIDpst = con.prepareStatement(findID);
-            ResultSet rs = findIDpst.executeQuery();){
-            
-            if(!rs.next()){
-                System.out.println("Student with ID " + id + " Doesn't Exist.");
-                return;
-            }
-
-            System.out.println("\nSelected  Product");               
-            String query = "SELECT * FROM students WHERE ID = " + id;
-            viewStudents(query);
-            
-            System.out.println("");
-
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        String query = "SELECT * FROM students WHERE id = " + id;
+        viewStudents(query);
         
-        String[] columnHeaders = {"Name", "Age", "Gender", "Email"};
-        String[] columnNames = {"s_name", "s_age", "s_gender", "s_email"};
-        conf.updateRecord("students", columnHeaders, columnNames, id);   
+        System.out.println("Enter New Student Details:");
+
+        System.out.print("\nNew Student Name: ");
+        String name = scan.nextLine();
+
+        System.out.print("New Age: ");
+        int age = scan.nextInt();
+
+        System.out.print("New Gender: ");
+        String gender = scan.next();
+        scan.nextLine();
+
+        System.out.print("New Email: ");
+        String email = scan.nextLine();
+        
+        String sql = "UPDATE students SET s_name = ?, s_age = ?, s_gender = ?, s_email = ? WHERE id = ?";
+        conf.updateRecord(sql, name, age, gender, email, id);
     }
     
 }
