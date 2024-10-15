@@ -5,13 +5,13 @@ import java.util.Scanner;
 
 public class SchoolClinicTracker {
     static Config conf = new Config();
+    static Scanner scan = new Scanner(System.in);
+    
+    static Students student = new Students();
+    static Medications meds = new Medications();
+    static Prescriptions pres = new Prescriptions();
 
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        
-        Students student = new Students();
-        Medications meds = new Medications();
-        Prescriptions pres = new Prescriptions();
         
         int choice;
         do {    
@@ -39,7 +39,8 @@ public class SchoolClinicTracker {
                         pres.prescriptionsConfig();
                         break;
                     case 4:
-                        presHistory();
+                        medReport();
+                        break;
                     case 5:                      
                         System.out.println("Exiting...");
                         break;
@@ -54,18 +55,50 @@ public class SchoolClinicTracker {
         } while (choice != 5);  
     }
     
-    public static void presHistory(){
-        System.out.println("\n\t\t\t\t\t   + PRESCRIPTIONS HISTORY +");
+    public static void medReport(){
+        System.out.println("\n\t\t\t\t\t\t\t     + STUDENTS LIST +");
+        student.viewStudents("SELECT * FROM students");
         
-        String sql = "SELECT pres.id, stud.s_name AS s_name, med.medication_name AS med_name, pres.dosage, pres.prescription_date "
-                + "FROM prescriptions pres "
-                + "JOIN students stud ON stud.id = pres.student_id "
-                + "JOIN medications med ON med.id = pres.med_id";
+        int s_id;
+        do{
+            System.out.print("\nStudent ID: ");
+            s_id = scan.nextInt();
+            if(!conf.doesIDExist("students", s_id)){
+                System.out.println("Student ID Doesn't Exist.");
+            }
+        }while(!conf.doesIDExist("students", s_id));
+        System.out.println("-------------------------------------------------------------------------------------------------------------\n");
         
-        String[] headers = {"ID", "Student Name", "Medication Name", "Dosage", "Prescription Date"};
-        String[] columns = {"id", "s_name", "med_name", "dosage", "prescription_date"};
-        int spacing = 20;
+        String s_name = conf.getDataFromID("students", s_id, "s_name");
+        String age = conf.getDataFromID("students", s_id, "s_age");
+        String gender = conf.getDataFromID("students", s_id, "s_gender");
+        
+        System.out.println("\n\t\t + Student Medication Report +");
+        
+        System.out.println("\nStudent ID: " + s_id);
+        System.out.println("Name: " + s_name);
+        System.out.println("Gender: " + gender);
+        System.out.println("Age: " + age);
+        
+        System.out.println("\nMedication Histoty:");
+        
+        String sql = "SELECT "
+                        + "medications.medication_name, "
+                        + "prescriptions.dosage, "
+                        + "prescriptions.prescription_date, "
+                        + "medications.description "
+                    + "FROM "
+                         + "prescriptions "
+                    + "JOIN "
+                        + "students ON prescriptions.student_id = students.id "
+                    + "JOIN "
+                        + "medications ON prescriptions.med_id = medications.id WHERE students.id = " + s_id;
+        
+        String[] headers = {"Medication Name", "Dosage", "Prescription Date", "Medication Description"};
+        String[] columns = {"medication_name", "dosage", "prescription_date", "description"};
+        int spacing = 37;
         
         conf.viewRecords(sql, spacing, headers, columns);
+        System.out.println("\n");
     }
 }
