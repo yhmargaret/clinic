@@ -23,9 +23,14 @@ public class Students {
                 System.out.print("\nEnter Option: ");
                 opt = scan.nextInt();
                 scan.nextLine(); 
-
+                
+                boolean emptyTable = conf.isTableEmpty("students");
                 switch (opt) {
                     case 1:{
+                        if (emptyTable) {
+                            System.out.println("Students Table is Empty.");
+                            break;
+                        }
                         System.out.println("\n\t\t\t\t\t\t\t\t  + STUDENTS LIST +");
                         String query = "SELECT * FROM students";
                         viewStudents(query);    
@@ -37,11 +42,19 @@ public class Students {
                         break;
                     }
                     case 3:{ 
+                        if (emptyTable) {
+                            System.out.println("Students Table is Empty.");
+                            break;
+                        }
                         System.out.println("\n   + DELETING A STUDENT +\n");
                         deleteStudent();
                         break;
                     }
                     case 4:{ 
+                        if (emptyTable) {
+                            System.out.println("Students Table is Empty.");
+                            break;
+                        }
                         System.out.println("\n   + EDITING A STUDENT +\n");
                         updateStudent();                     
                         break;

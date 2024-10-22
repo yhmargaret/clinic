@@ -23,9 +23,14 @@ public class Medications {
                 System.out.print("\nEnter Option: ");
                 opt = scan.nextInt();
                 scan.nextLine(); 
-
+                
+                boolean emptyTable = conf.isTableEmpty("medications");
                 switch (opt) {
                     case 1:
+                        if (emptyTable) {
+                            System.out.println("Medications Table is Empty.");
+                            break;
+                        }
                         System.out.println("\n\t+ MEDICINES LIST +");
                         String query = "SELECT * FROM medications";
                         viewMedications(query);
@@ -35,10 +40,18 @@ public class Medications {
                         addMedication();
                         break;
                     case 3:
+                        if (emptyTable) {
+                            System.out.println("Medications Table is Empty.");
+                            break;
+                        }
                         System.out.println("\n   + DELETING A MEDICINE +\n");
                         deleteMedicine();
                         break;
                     case 4:
+                        if (emptyTable) {
+                            System.out.println("Medications Table is Empty.");
+                            break;
+                        }
                         System.out.println("\n   + EDITING A MEDICINE +\n");
                         updateMedicine();
                         break;

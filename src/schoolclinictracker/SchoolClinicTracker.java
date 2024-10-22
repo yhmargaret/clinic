@@ -67,20 +67,22 @@ public class SchoolClinicTracker {
                 System.out.println("Student ID Doesn't Exist.");
             }
         }while(!conf.doesIDExist("students", s_id));
-        System.out.println("-------------------------------------------------------------------------------------------------------------\n");
         
         String s_name = conf.getDataFromID("students", s_id, "s_name");
         String age = conf.getDataFromID("students", s_id, "s_age");
         String gender = conf.getDataFromID("students", s_id, "s_gender");
         
-        System.out.println("\n\t\t + Student Medication Report +");
+        System.out.println("\n=================================================================================================================================================================");
+        System.out.printf("%95s\n\n", "+ Student Medication Report +");
+        System.out.println("=================================================================================================================================================================");
+        
         
         System.out.println("\nStudent ID: " + s_id);
         System.out.println("Name: " + s_name);
         System.out.println("Gender: " + gender);
         System.out.println("Age: " + age);
         
-        System.out.println("\nMedication Histoty:");
+        System.out.println("\nMedication History:");
         
         String sql = "SELECT "
                         + "medications.medication_name, "
@@ -99,6 +101,6 @@ public class SchoolClinicTracker {
         int spacing = 37;
         
         conf.viewRecords(sql, spacing, headers, columns);
-        System.out.println("\n");
+        System.out.println("\n\n=================================================================================================================================================================\n");
     }
 }

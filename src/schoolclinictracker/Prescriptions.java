@@ -23,9 +23,14 @@ public class Prescriptions {
                 System.out.print("\nEnter Option: ");
                 opt = scan.nextInt();
                 scan.nextLine(); 
-
+                
+                boolean emptyTable = conf.isTableEmpty("prescriptions");
                 switch (opt) {
                     case 1:{
+                        if (emptyTable) {
+                            System.out.println("Prescriptions Table is Empty.");
+                            break;
+                        }
                         System.out.println("\n\t\t\t\t\t     + PRESCRIPTIONS LIST +");
                         String query = "SELECT * FROM prescriptions";
                         viewPrescriptions(query);
@@ -37,11 +42,19 @@ public class Prescriptions {
                         break;
                     }
                     case 3:{ 
+                        if (emptyTable) {
+                            System.out.println("Prescriptions Table is Empty.");
+                            break;
+                        }
                         System.out.println("\n   + DELETING A PRESCRIPTIONS +\n");
                         deletePrescription();
                         break;
                     }
                     case 4:{ 
+                        if (emptyTable) {
+                            System.out.println("Prescriptions Table is Empty.");
+                            break;
+                        }
                         System.out.println("\n   + EDITING A PRESCRIPTIONS +\n");
                         updatePrescription();
                         break;
