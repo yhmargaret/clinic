@@ -1,5 +1,7 @@
 package schoolclinictracker;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -32,7 +34,12 @@ public class Prescriptions {
                             break;
                         }
                         System.out.println("\n\t\t\t\t\t     + PRESCRIPTIONS LIST +");
-                        String query = "SELECT * FROM prescriptions";
+                        String query = "SELECT pres.id, stu.s_name, med.medication_name, pres.dosage, pres.prescription_date "
+                                    + "FROM prescriptions pres "
+                                    + "JOIN medications med "
+                                        + "ON pres.med_id = med.id "
+                                    + "JOIN students stu "
+                                        + "ON pres.student_id = stu.id";
                         viewPrescriptions(query);
                         break;
                     }
@@ -75,25 +82,32 @@ public class Prescriptions {
     }
     
     public void viewPrescriptions(String query){
-        String[] prescriptionsHeaders = {"ID", "Student ID", "Medication ID", "Dosage", "Prescription Date"};
-        String[] prescriptionsColumns = {"id", "student_id", "med_id", "dosage", "prescription_date"};
+        String[] prescriptionsHeaders = {"ID", "Student Name", "Medication Name", "Dosage", "Prescription Date"};
+        String[] prescriptionsColumns = {"id", "s_name", "medication_name", "dosage", "prescription_date"};
         int spacing = 20;
         
         conf.viewRecords(query, spacing, prescriptionsHeaders, prescriptionsColumns);
     }
     
     public void addPrescription(){
+        Students stu = new Students();
+        Medications med = new Medications();
+        
         System.out.println("Enter Prescription Details:");
-
+        
+        System.out.println("\n\t\t\t\t\t\t\t\t  + STUDENTS LIST +");
+        stu.viewStudents("SELECT * FROM students");    
         int s_id;
         do{
             System.out.print("\nStudent ID: ");
             s_id = scan.nextInt();
             if(!conf.doesIDExist("students", s_id)){
-                System.out.println("Patient ID Doesn't Exist.");
+                System.out.println("Student ID Doesn't Exist.");
             }
         }while(!conf.doesIDExist("students", s_id));
         
+        System.out.println("\n\t+ MEDICINES LIST +");
+        med.viewMedications("SELECT * FROM medications");
         int med_id;
         do{
             System.out.print("Medication ID: ");
@@ -107,11 +121,8 @@ public class Prescriptions {
         System.out.print("Dosage: ");
         String dosage = scan.nextLine();
 
-        System.out.print("Prescription Date: ");
-        String date = scan.nextLine();
-
         String sql = "INSERT INTO prescriptions (student_id, med_id, dosage, prescription_date) VALUES (?, ?, ?, ?)";       
-        conf.addRecord(sql, s_id, med_id, dosage, date);
+        conf.addRecord(sql, s_id, med_id, dosage, dateToday());
     }
     
     public void deletePrescription(){
@@ -170,5 +181,10 @@ public class Prescriptions {
         
         String sql = "UPDATE prescriptions SET student_id = ?, med_id = ?, dosage = ?, prescription_date = ? WHERE id = ?";
         conf.updateRecord(sql, s_id, med_id, dosage, date, id);   
+    }
+    
+    public String dateToday(){       
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MMM dd, yyyy");       
+        return LocalDateTime.now().format(format);
     }
 }
