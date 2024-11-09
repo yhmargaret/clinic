@@ -13,7 +13,7 @@ public class Medications {
 
         do {    
             try {
-                System.out.println("\n   + Medications Menu +\n");
+                System.out.println("\nMedications Menu\n");
                 System.out.println("1. View All Medications");
                 System.out.println("2. Add New Medication");
                 System.out.println("3. Delete Medication");
@@ -23,6 +23,8 @@ public class Medications {
                 System.out.print("\nEnter Option: ");
                 opt = scan.nextInt();
                 scan.nextLine(); 
+                
+                System.out.println("");
                 
                 boolean emptyTable = conf.isTableEmpty("medications");
                 switch (opt) {
@@ -36,7 +38,6 @@ public class Medications {
                         viewMedications(query);
                         break;
                     case 2:
-                        System.out.println("\n   + ADDING NEW MEDICINE +\n");
                         addMedication();
                         break;
                     case 3:
@@ -44,7 +45,6 @@ public class Medications {
                             System.out.println("Medications Table is Empty.");
                             break;
                         }
-                        System.out.println("\n   + DELETING A MEDICINE +\n");
                         deleteMedicine();
                         break;
                     case 4:
@@ -52,7 +52,6 @@ public class Medications {
                             System.out.println("Medications Table is Empty.");
                             break;
                         }
-                        System.out.println("\n   + EDITING A MEDICINE +\n");
                         updateMedicine();
                         break;
                     case 5:

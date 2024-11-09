@@ -13,7 +13,7 @@ public class Students {
 
         do {    
             try {
-                System.out.println("\n   + Student Config +\n");
+                System.out.println("\nStudent Config\n");
                 System.out.println("1. View All Student");
                 System.out.println("2. Add a Student");
                 System.out.println("3. Delete a Student");
@@ -23,6 +23,8 @@ public class Students {
                 System.out.print("\nEnter Option: ");
                 opt = scan.nextInt();
                 scan.nextLine(); 
+                
+                System.out.println("");
                 
                 boolean emptyTable = conf.isTableEmpty("students");
                 switch (opt) {
@@ -37,7 +39,6 @@ public class Students {
                         break;
                     }
                     case 2:{
-                        System.out.println("\n   + ADDING NEW STUDENT +\n");
                         addStudent();
                         break;
                     }
@@ -46,7 +47,6 @@ public class Students {
                             System.out.println("Students Table is Empty.");
                             break;
                         }
-                        System.out.println("\n   + DELETING A STUDENT +\n");
                         deleteStudent();
                         break;
                     }
@@ -55,7 +55,6 @@ public class Students {
                             System.out.println("Students Table is Empty.");
                             break;
                         }
-                        System.out.println("\n   + EDITING A STUDENT +\n");
                         updateStudent();                     
                         break;
                     }  

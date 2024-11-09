@@ -15,7 +15,7 @@ public class Prescriptions {
 
         do {    
             try {
-                System.out.println("\n\t=== Prescriptions Menu ===\n");
+                System.out.println("\nPrescriptions Menu\n");
                 System.out.println("1. View All Prescriptions");
                 System.out.println("2. Add New Prescription");
                 System.out.println("3. Delete Prescription");
@@ -44,7 +44,6 @@ public class Prescriptions {
                         break;
                     }
                     case 2:{
-                        System.out.println("\n   + ADDING NEW PRESCRIPTIONS +\n");
                         addPrescription();
                         break;
                     }
@@ -53,7 +52,6 @@ public class Prescriptions {
                             System.out.println("Prescriptions Table is Empty.");
                             break;
                         }
-                        System.out.println("\n   + DELETING A PRESCRIPTIONS +\n");
                         deletePrescription();
                         break;
                     }
@@ -62,7 +60,6 @@ public class Prescriptions {
                             System.out.println("Prescriptions Table is Empty.");
                             break;
                         }
-                        System.out.println("\n   + EDITING A PRESCRIPTIONS +\n");
                         updatePrescription();
                         break;
                     }  
@@ -174,13 +171,10 @@ public class Prescriptions {
         scan.nextLine();
 
         System.out.print("New Dosage: ");
-        String dosage = scan.nextLine();
-
-        System.out.print("New Prescription Date: ");
-        String date = scan.nextLine();
+        String dosage = scan.nextLine();     
         
         String sql = "UPDATE prescriptions SET student_id = ?, med_id = ?, dosage = ?, prescription_date = ? WHERE id = ?";
-        conf.updateRecord(sql, s_id, med_id, dosage, date, id);   
+        conf.updateRecord(sql, s_id, med_id, dosage, dateToday(), id);   
     }
     
     public String dateToday(){       
